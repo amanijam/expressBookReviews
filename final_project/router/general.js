@@ -4,6 +4,8 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
+const axios = require('axios');
+
 const doesExist = (username)=>{
     let userswithsamename = users.filter((user)=>{
       return user.username === username
@@ -31,8 +33,19 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
-    res.send(JSON.stringify(books,null,4));
+// public_users.get('/',function (req, res) {
+//     res.send(JSON.stringify(books,null,4));
+// });
+
+// Get the book list available in the shop [WITH AXIOS]
+public_users.get('/', async function (req, res) {
+    try {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        res.send(JSON.stringify(books, null, 4));
+    } catch (error) {
+        console.error('Error fetching books:', error);
+        res.status(500).send('Error fetching books');
+    }
 });
 
 // Get book details based on ISBN
