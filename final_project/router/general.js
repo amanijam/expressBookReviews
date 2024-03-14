@@ -40,13 +40,33 @@ public_users.get('/author/:author',function (req, res) {
     } else {
         res.status(404).json({message: "No book(s) found by given author"});
     }
-    
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    let param = req.params.title;
+    let tokens = param.split("-");
+    let title = "";
+    for (let i = 0; i < tokens.length; i++){
+        if (i < tokens.length-1){
+            title = title + tokens[i] + " ";
+        } else{
+            title += tokens[i]
+        } 
+    }
+    let result = [];
+    for (let i = 1; i <= 10; i++){
+        let b = books[i];
+        if (b["title"].toLowerCase() === title.toLowerCase()){
+            result.push(b);
+        }
+    }
+
+    if (result.length > 0){
+        res.send(result);
+    } else {
+        res.status(404).json({message: "No book(s) found with given title"});
+    }
 });
 
 //  Get book review
